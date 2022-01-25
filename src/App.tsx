@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {useEffect, useState} from 'react';
+import AppBody from './components/AppBody';
 
 function App() {
+  const [weatherData,setWeatherData] = useState([]);
+
+  const getWeatherData = async () => {
+    const data = await fetch("https://api.openweathermap.org/data/2.5/forecast?q=kolkata&appid=caae850b1c5faddca3f8aba5cb81c2ea");
+
+    const weather = await data.json();
+
+    setWeatherData(weather.list[0].main.temp);
+  }
+
+  useEffect(() => {
+    getWeatherData()
+  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <AppBody temp={weatherData} weather={"clear"}  />
     </div>
   );
 }
